@@ -1,0 +1,217 @@
+--2014年查询语句
+
+--军警绿色车入口
+--客车
+
+unload to /info_back1/accountodflow2014 select enstation,exvehclass,cardtype,vehcount,cashmoney,totalweight,extruckflag,exvehstatus from accountodflow201401 union all select enstation,exvehclass,cardtype,vehcount,cashmoney,totalweight,extruckflag,exvehstatus from accountodflow201402 union all select enstation,exvehclass,cardtype,vehcount,cashmoney,totalweight,extruckflag,exvehstatus from accountodflow201403 union all select enstation,exvehclass,cardtype,vehcount,cashmoney,totalweight,extruckflag,exvehstatus from accountodflow201404 union all select enstation,exvehclass,cardtype,vehcount,cashmoney,totalweight,extruckflag,exvehstatus from accountodflow201405 union all select enstation,exvehclass,cardtype,vehcount,cashmoney,totalweight,extruckflag,exvehstatus from accountodflow201406 union all select enstation,exvehclass,cardtype,vehcount,cashmoney,totalweight,extruckflag,exvehstatus from accountodflow201407 union all select enstation,exvehclass,cardtype,vehcount,cashmoney,totalweight,extruckflag,exvehstatus from accountodflow201408 union all select enstation,exvehclass,cardtype,vehcount,cashmoney,totalweight,extruckflag,exvehstatus from accountodflow201409 union all select enstation,exvehclass,cardtype,vehcount,cashmoney,totalweight,extruckflag,exvehstatus from accountodflow201410 union all select enstation,exvehclass,cardtype,vehcount,cashmoney,totalweight,extruckflag,exvehstatus from accountodflow201411 union all select enstation,exvehclass,cardtype,vehcount,cashmoney,totalweight,extruckflag,exvehstatus from accountodflow201412 
+
+
+select enstation,exvehclass,case when cardtype between 8 and 10 then 'nianpiao' else 'feinianpiao' end,sum(count),sum(money),sum(weight) from (
+	  select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow2014 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by enstation,exvehclass,cardtype  
+union all select enstation,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata2014 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus in(1,2,7) group by enstation,cardvehclass ,cardtype)group by enstation,exvehclass,cardtype order by cardtype,enstation,exvehclass;
+
+
+select enstation,exvehclass,case when cardtype between 8 and 10 then '年票' else '非年票' end,sum(count),sum(money),sum(weight) from (
+	  select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201401 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201402 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201403 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201404 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3 
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201405 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201406 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201407 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201408 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201409 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201410 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201411 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201412 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+
+unload to /info_back1/etcsourcedata2014 select enstation,cardvehclass,cardtype,realmoney,totalweight,truckflag,vehstatus  from etcsourcedata201401 union all select enstation,cardvehclass,cardtype,realmoney,totalweight,truckflag,vehstatus  from etcsourcedata201402 union all select enstation,cardvehclass,cardtype,realmoney,totalweight,truckflag,vehstatus  from etcsourcedata201403 union all select enstation,cardvehclass,cardtype,realmoney,totalweight,truckflag,vehstatus  from etcsourcedata201404 union all select enstation,cardvehclass,cardtype,realmoney,totalweight,truckflag,vehstatus  from etcsourcedata201405 
+
+union all select enstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201401 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus in(1,2,7) group by 1,2,3
+union all select enstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201402 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus in(1,2,7) group by 1,2,3
+union all select enstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201403 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus in(1,2,7) group by 1,2,3
+union all select enstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201404 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus in(1,2,7) group by 1,2,3
+union all select enstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201405 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus in(1,2,7) group by 1,2,3
+) group by 1,2,3 order by 3,1,2;
+
+
+
+
+--军警绿色车入口
+--货车
+
+select enstation,case axistype when 1 then 1 when 2 then 2 else case axisnum when 3 then 3 else 4 end end,case when cardtype between 8 and 10 then '年票' else '非年票' end,sum(count),sum(money),sum(weight) from (
+	  select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201401 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201402 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201403 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201404 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4 
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201405 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201406 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201407 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201408 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201409 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201410 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201411 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201412 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+
+union all select enstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201401 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus in(1,2,7) group by 1,2,3,4
+union all select enstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201402 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus in(1,2,7) group by 1,2,3,4
+union all select enstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201403 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus in(1,2,7) group by 1,2,3,4
+union all select enstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201404 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus in(1,2,7) group by 1,2,3,4
+union all select enstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201405 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus in(1,2,7) group by 1,2,3,4
+
+) group by 1,2,3 order by 3,1,2;
+
+
+--军警绿色车出口
+--客车
+
+select exstation,exvehclass,case when cardtype between 8 and 10 then '年票' else '非年票' end,sum(count),sum(money),sum(weight) from (
+	  select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201401 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201402 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201403 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201404 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3 
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201405 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201406 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201407 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201408 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201409 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201410 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201411 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201412 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus in(1,2,7)  group by 1,2,3  
+
+union all select exstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201401 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus in(1,2,7) group by 1,2,3
+union all select exstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201402 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus in(1,2,7) group by 1,2,3
+union all select exstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201403 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus in(1,2,7) group by 1,2,3
+union all select exstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201404 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus in(1,2,7) group by 1,2,3
+union all select exstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201405 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus in(1,2,7) group by 1,2,3
+) group by 1,2,3 order by 3,1,2;
+
+
+
+--军警绿色车出口
+--货车
+
+select exstation,case axistype when 1 then 1 when 2 then 2 else case axisnum when 3 then 3 else 4 end end,case when cardtype between 8 and 10 then '年票' else '非年票' end,sum(count),sum(money),sum(weight) from (
+	  select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201401 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201402 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201403 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201404 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4 
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201405 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201406 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201407 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201408 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201409 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201410 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201411 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201412 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus in(1,2,7)  group by 1,2,3,4  
+
+union all select exstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201401 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus in(1,2,7) group by 1,2,3,4
+union all select exstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201402 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus in(1,2,7) group by 1,2,3,4
+union all select exstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201403 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus in(1,2,7) group by 1,2,3,4
+union all select exstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201404 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus in(1,2,7) group by 1,2,3,4
+union all select exstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201405 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus in(1,2,7) group by 1,2,3,4
+) group by 1,2,3 order by 3,1,2;
+
+select first * from accountodflow201409
+--收费车入口  (不含军警绿色)
+--客车
+
+
+select enstation,exvehclass,case when cardtype between 8 and 10 then '年票' else '非年票' end,sum(count),sum(money),sum(weight) from (
+	  select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201401 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201402 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201403 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201404 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3 
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201405 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201406 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201407 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201408 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201409 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201410 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201411 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select enstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201412 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+
+union all select enstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201401 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus not in(1,2,7) group by 1,2,3
+union all select enstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201402 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus not in(1,2,7) group by 1,2,3
+union all select enstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201403 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus not in(1,2,7) group by 1,2,3
+union all select enstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201404 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus not in(1,2,7) group by 1,2,3
+union all select enstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201405 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus not in(1,2,7) group by 1,2,3
+) group by 1,2,3 order by 3,1,2;
+
+
+--收费车入口  (不含军警)
+--货车
+
+select enstation,case axistype when 1 then 1 when 2 then 2 else case axisnum when 3 then 3 else 4 end end,case when cardtype between 8 and 10 then '年票' else '非年票' end,sum(count),sum(money),sum(weight) from (
+	  select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201401 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201402 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201403 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201404 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4 
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201405 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201406 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201407 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201408 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201409 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201410 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201411 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select enstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201412 where enstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+
+union all select enstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201401 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus not in(1,2,7) group by 1,2,3,4
+union all select enstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201402 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus not in(1,2,7) group by 1,2,3,4
+union all select enstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201403 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus not in(1,2,7) group by 1,2,3,4
+union all select enstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201404 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus not in(1,2,7) group by 1,2,3,4
+union all select enstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201405 where enstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus not in(1,2,7) group by 1,2,3,4
+) group by 1,2,3 order by 3,1,2;
+
+
+--收费车出口  (不含军警)
+--客车
+
+select exstation,exvehclass,case when cardtype between 8 and 10 then '年票' else '非年票' end,sum(count),sum(money),sum(weight) from (
+	  select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201401 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201402 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201403 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201404 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3 
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201405 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201406 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201407 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201408 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201409 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201410 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201411 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+union all select exstation,exvehclass,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201412 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag!=1 and exvehstatus not in(1,2,7)  group by 1,2,3  
+
+union all select exstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201401 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus not in(1,2,7) group by 1,2,3
+union all select exstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201402 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus not in(1,2,7) group by 1,2,3
+union all select exstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201403 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus not in(1,2,7) group by 1,2,3
+union all select exstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201404 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus not in(1,2,7) group by 1,2,3
+union all select exstation+0,cardvehclass,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201405 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag!=1 and vehstatus not in(1,2,7) group by 1,2,3
+) group by 1,2,3 order by 3,1,2;
+
+
+--收费车出口  (不含军警)
+--货车
+
+select exstation,case axistype when 1 then 1 when 2 then 2 else case axisnum when 3 then 3 else 4 end end,case when cardtype between 8 and 10 then '年票' else '非年票' end,sum(count),sum(money),sum(weight) from (
+	  select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201401 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201402 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201403 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201404 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4 
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201405 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201406 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201407 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201408 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201409 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201410 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201411 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+union all select exstation,axistype,axisnum,cardtype,sum(vehcount) count,sum(cashmoney) money,sum(totalweight) weight from accountodflow201412 where exstation in(220,3020,2520,2020,320,1920,1620) and extruckflag=1 and exvehstatus not in(1,2,7)  group by 1,2,3,4  
+
+union all select exstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201401 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus not in(1,2,7) group by 1,2,3,4
+union all select exstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201402 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus not in(1,2,7) group by 1,2,3,4
+union all select exstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201403 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus not in(1,2,7) group by 1,2,3,4
+union all select exstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201404 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus not in(1,2,7) group by 1,2,3,4
+union all select exstation+0,axistype,axisnum,cardtype,count(*) count,sum(realmoney) money,sum(totalweight) weight from etcsourcedata201405 where exstation in('0220','3020','2520','2020','0320','1920','1620') and truckflag=1 and vehstatus not in(1,2,7) group by 1,2,3,4
+) group by 1,2,3 order by 3,1,2;
+
+

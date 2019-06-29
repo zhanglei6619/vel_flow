@@ -1,0 +1,47 @@
+python安装+pyspark安装（246 247 249安装，248大文件ftp不过去）
+1、/usr下，mkdir -p python
+2、tar -zvxf Python-2.712.tgz     tar xvf zlib-1.2.8.tar.gz(去掉z才不报错)
+3、./configure --prefix=/usr/local/python2.7 --with-zlib=/usr/local/include（需在官网下载zlib并安装，然后重新编译python，否则setuptool装不了）
+4、make   make install
+5、ln -s /usr/local/python2.7/bin/python  /usr/bin/python2.7
+6、yum install python-devel（使用默认的版本2.6.6，不用可省）
+7、安装site-package。setuptool装好后，在各自安装文件目录下，运行python2.7 setup.py install，cx_Oracle要在oracle用户名下装），py4j（运行spark时所需）,numpy，pandas(需在pypi下载并安装：numpy,Cython,dateutils,pytz,six)。scikit-learn(先装scipy，等，spark有MLlib故暂不用)，matplotlib(先装distribute，png等，pandas有替代暂不用)
+8、cp -R /usr/python/spark-2.0.0-bin-hadoop2.7/python/pyspark/* /usr/local/python2.7/lib/python2.7/site-packages/pyspark
+9、修改配置文件vi /etc/profile，最后一行添加 
+export SPARK_HOME=/usr/python/spark-2.0.0-bin-hadoop2.7
+export PATH=$PATH:$SPARK_HOME/bin
+source /etc/profile 使文件立即生效。测试spark环境生效。
+10、搭建spark集群。修改spark配置：cp spark-env.sh.template spark-env.sh
+，export SPARK_MASTER_IP=10.50.4.246 export SPARK_WORKER_MEMORY=96g
+export HADOOP_CONF_DIR=/usr/python/spark-2.0.0-bin-hadoop2.7/conf（不用）。cp slaves.template slaves，加上：10.50.4.246 10.50.4.247、249
+11、单机spark运行python程序：
+需在$SPARK_HOME/conf/spark-env.sh加入python环境变量：
+export PYSPARK_PYTHON="python2.7"
+另外，需将$SPARK_HOME/conf/spark-defaults.conf将spark.driver.memory扩大，否则数据量大会报错。
+12、spark集群。首先要启动集群：$SPARK_HOME/sbin/start-all.sh
+停止：$SPARK_HOME/sbin/stop-all.sh
+$SPARK_HOME/bin/spark-submit --master spark://10.50.4.246:7077 /usr/local/python2.7/sparktest2.py (加上master参数才能启动集群)
+$SPARK_HOME/bin/spark-submit /usr/local/python2.7/sparktest1.py 
+远程拷贝文件：（非hadoop文件各节点需要存一份，否则找不到文件）
+scp /usr/local/python2.7/*_m root@10.50.4.248:/usr/local/python2.7
+免密登录：ssh-keygen -t rsa -P ''生成公钥在/root/.ssh，拷到B机：
+scp /root/.ssh/id_rsa.pub root@10.50.4.246:/root/id_rsa.pub 
+B机中把复制的id_rsa.pub添加到.ssh/authorzied_keys文件里：
+cat id_rsa.pub >> .ssh/authorized_keys 
+chmod 600 .ssh/authorized_keys
+必要时删除 .ssh/known_hosts
+
+scp $SPARK_HOME/conf/slaves root@10.50.4.249:$SPARK_HOME/conf/
+scp /usr/local/python2.7/exmoney2015.unl root@10.50.4.247:/usr/local/python2.7/exmoney2015.unl 
+
+
+13、pandas转spark形式效率太低，而spark读文本效率高
+
+
+
+
+
+
+
+
+

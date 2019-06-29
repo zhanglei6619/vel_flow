@@ -1,0 +1,45 @@
+导入本机mysql相关操作：
+--导出表结构
+dbschema -d centersource -ss > /centersource.sql
+
+--informix至文本
+导出文本.txt先建在/info_back2
+dbaccess use-editor的py123.sql 先建在/informix，脚本如下：
+-0.8老数据
+unload to /info_back2/exlist201501.txt select listno, EnRoad,EnStation,EnStationName,enlane,EnLaneType,EnVehPlate,EnVehClass,EnVehStatus,EnTruckFlag,EnTime,ExRoad,ExStation,ExStationName,exlane,ExLaneType,ExVehPlate,ExVehClass,ExVehStatus,ExTruckFlag,ExTime,Miles,Speed from exlist201501;
+-0.2新数据
+unload to /informix/exlist201507.txt select listno, EnRoad,EnStation,EnStationName,enlane,/*EnLaneType*/,EnVehPlate,EnVehClass,EnVehStatus,EnTruckFlag,EnTime,ExRoad,ExStation,ExStationName,exlane,ExLaneType,ExVehPlate,ExVehClass,ExVehStatus,ExTruckFlag,ExTime,Miles,Speed from listex201507;
+
+
+--需导出配置表：CodeInfoVehClass，CodeInfoVehStatus，CodeInfoLaneType，Road，Station
+unload to /informix/Road.txt select road, roadname from road
+1:一型车；2：二型车；3：三型车；4：四型车；5：五型车
+unload to /informix/CodeInfoVehStatus.txt select *from CodeInfoVehStatus
+unload to /informix/CodeInfoLaneType.txt select * from CodeInfoLaneType
+
+导数据至oracle操作
+1、进入点2，在informix下:export DBDATE=Y4MD，通过select first 10 enshiftdate from listex201601检查日期是否为英文格式。 
+2、unload to /info_back1/listex201604.txt select * from listex201604
+3、通过脚本建表（改为oracle字段格式，开头为：sqlplus system/Oracle123@mpcenter）。
+4、建立ctl，log，bad文档。ctl里按顺序列举所有字段
+5、查看oracle数据库字符集，确保环境变量字符集与之一致，否则乱码。
+export NLS_LANG=AMERICAN_CHINA.ZHS16GBK export LANG=ZH_CH.gbk(可写入.bash_profile)
+6、sqlldr system/Oracle123@mpcenter control=./xxtest1.ctl log=./xx07.log bad=./xx07 direct=Y 
+7、增加表空间。ALTER TABLESPACE users
+ADD DATAFILE '+DATA/mpcenter/datafile/users_004.dbf'
+SIZE 20G
+
+Oracle导出至文本，sqlplus中：
+SPOOL /usr/local/python2.7/exmoney1516.txt
+SELECT exstation,extime from listex201507;
+SPOOL OFF
+
+unload to /info_back1/ex201606.txt select exstation,extime from listex201606
+
+select * from user_indexes where index_name ='XXTEST_I'
+drop index XXTEST_I;
+
+--货车载重查询
+select first 100 ExTruckFlag,TotalWeight,WsDealType,TollMoney from listex201612 where ExTruckFlag<>0
+
+

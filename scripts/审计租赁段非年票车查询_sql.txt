@@ -1,0 +1,231 @@
+sqlplus system/Oracle123@mpcenter
+
+SPOOL usr/local/python2.7/exmoney1516.txt
+
+select exstation,exstationname,exvehclass,case when paytype=0 then 'NONETC' else 'ETC' end, sum(vehcount) vehcount,sum(realmoney) realmoney from (select exstation,exstationname,exvehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from exmoney2015 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and extruckflag=0 and exshiftdate >=to_date('2015-7-18') and (exshiftdate>=to_date('2015-10-8') or exshiftdate<('2015-10-1')) and realmoney>0 and yearflag=0 group by exstation,exstationname,exvehclass,paytype union all
+select exstation,exstationname,exvehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from exmoney2016 where (exshiftdate>=to_date('2016-2-14') or exshiftdate<to_date('2016-2-7')) and exstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag=0 and realmoney>0 and yearflag=0 group by exstation,exstationname,exvehclass,paytype
+) group by exstation,exstationname,exvehclass,paytype;
+
+SPOOL OFF
+
+select exstation,exstationname,exvehclass,case when paytype=0 then 'NONETC' else 'ETC' end, sum(vehcount) vehcount,sum(realmoney) realmoney from (select exstation,exstationname,exvehclass,paytype,sum(vehcount)vehcount,sum(realmoney) realmoney from listex201507 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and extruckflag=0 and exshiftdate >=to_date('2015-7-18') and realmoney>0 and yearflag=0 group by exstation,exstationname,exvehclass,paytype union all
+select exstation,exstationname,exvehclass,paytype,sum(vehcount)vehcount,sum(realmoney) realmoney from listex201508 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and extruckflag=0 and realmoney>0 and yearflag=0 group by exstation,exstationname,exvehclass,paytype union all
+select exstation,exstationname,exvehclass,paytype,sum(vehcount)vehcount,sum(realmoney) realmoney from listex201509 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and realmoney>0 and yearflag=0 group by exstation,exstationname,exvehclass,paytype union all
+select exstation,exstationname,exvehclass,paytype,sum(vehcount)vehcount,sum(realmoney) realmoney from listex201510 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and extruckflag=0 and (exshiftdate>=to_date('2015-10-8') or exshiftdate<('2015-10-1')) and realmoney>0 and yearflag=0 group by exstation,exstationname,exvehclass,paytype union all select exstation,exstationname,exvehclass,paytype,sum(vehcount)vehcount,sum(realmoney) realmoney from exmoney2015 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and extruckflag=0 and realmoney>0 and yearflag=0 group by exstation,exstationname,exvehclass,paytype union all
+select exstation,exstationname,exvehclass,paytype,sum(vehcount)vehcount,sum(realmoney) realmoney from exmoney2015 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and extruckflag=0 and realmoney>0 and yearflag=0 group by exstation,exstationname,exvehclass,paytype) group by exstation,exstationname,exvehclass,paytype
+
+(3706,2312,6008,0807,4705,2006,2605,3012,4208,0212) 
+
+------------------------------------联网后---------------------------------
+---------------出口-----------------
+select exstation,stationname,exvehclass,case when paytype=0 then '非ETC' else 'ETC' end,sum(vehcount) vehcount,sum(realmoney) realmoney from(
+
+select exstation,stationname_get(exstation) stationname,exvehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201507 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and yearflag=0 and realmoney>0  and exshiftdate>=datetime(2015-7-18) year to day group by 1,2,3,4
+union all 
+
+select exstation,stationname_get(exstation) stationname,exvehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201508 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and yearflag=0 and realmoney>0  group by 1,2,3,4
+union all 
+
+select exstation,stationname_get(exstation) stationname,exvehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201509 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and yearflag=0 and realmoney>0  group by 1,2,3,4
+union all
+
+select exstation,stationname_get(exstation) stationname,exvehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201510 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and yearflag=0 and realmoney>0  and extime>="2015-10-8 00:00:00" or extime<"2015-10-1 00:00:00" group by 1,2,3,4
+union all
+
+select exstation,stationname_get(exstation) stationname,exvehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201511 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and yearflag=0 and realmoney>0  group by 1,2,3,4
+union all
+
+select exstation,stationname_get(exstation) stationname,exvehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201512 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and yearflag=0 and realmoney>0  group by 1,2,3,4
+union all
+
+select exstation,stationname_get(exstation) stationname,exvehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201601 where exstation in 
+(0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and yearflag=0 and realmoney>0   group by 1,2,3,4
+union all
+
+select exstation,stationname_get(exstation) stationname,exvehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201602 where exstation in 
+(0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and yearflag=0 and realmoney>0  and extime<"2016-2-7 00:00:00" or extime>="2016-2-14 00:00:00" group by 1,2,3,4
+union all
+
+select exstation,stationname_get(exstation) stationname,exvehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201603 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and yearflag=0 and realmoney>0   group by 1,2,3,4
+union all
+
+select exstation,stationname_get(exstation) stationname,exvehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201604 where exstation in
+ (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and yearflag=0 and realmoney>0  and extime<"2016-4-4 00:00:00" or extime>="2016-4-7 00:00:00" group by 1,2,3,4
+union all
+
+select exstation,stationname_get(exstation) stationname,exvehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201605 where exstation in 
+(0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and yearflag=0 and realmoney>0  and extime>="2016-5-4 00:00:00" group by 1,2,3,4
+union all
+
+select exstation,stationname_get(exstation) stationname,exvehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201606 where exstation in 
+(0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and yearflag=0 and realmoney>0   group by 1,2,3,4
+
+)group by 1,2,3,4;
+
+---------------入口------------------
+select enstation,stationname,envehclass,case when paytype=0 then '非ETC' else 'ETC' end,sum(vehcount) vehcount,sum(realmoney) realmoney from(
+
+select enstation,stationname_get(enstation) stationname,envehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201507 where enstation in
+ (0220,3020,2020,0320,1920,1620,2520) and entruckflag<>0 and yearflag=0 and realmoney>0  and enshiftdate>=datetime(2015-7-18) year to day  group by 1,2,3,4
+union all 
+
+select enstation,stationname_get(enstation) stationname,envehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201508 where enstation in
+ (0220,3020,2020,0320,1920,1620,2520) and entruckflag<>0 and yearflag=0 and realmoney>0  group by 1,2,3,4
+union all 
+
+select enstation,stationname_get(enstation) stationname,envehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201509 where enstation in
+ (0220,3020,2020,0320,1920,1620,2520) and entruckflag<>0 and yearflag=0 and realmoney>0  group by 1,2,3,4
+union all
+
+select enstation,stationname_get(enstation) stationname,envehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201510 where enstation in
+ (0220,3020,2020,0320,1920,1620,2520) and entruckflag<>0 and yearflag=0 and realmoney>0  and entime>="2015-10-8 00:00:00" or entime<"2015-10-1 00:00:00" group by 1,2,3,4
+union all
+
+select enstation,stationname_get(enstation) stationname,envehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201511 where enstation in
+ (0220,3020,2020,0320,1920,1620,2520) and entruckflag<>0 and yearflag=0 and realmoney>0  group by 1,2,3,4
+union all
+
+select enstation,stationname_get(enstation) stationname,envehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201512 where enstation in
+ (0220,3020,2020,0320,1920,1620,2520) and entruckflag<>0 and yearflag=0 and realmoney>0  group by 1,2,3,4
+union all
+
+select enstation,stationname_get(enstation) stationname,envehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201601 where enstation in
+ (0220,3020,2020,0320,1920,1620,2520) and entruckflag<>0 and yearflag=0 and realmoney>0   group by 1,2,3,4
+union all
+
+select enstation,stationname_get(enstation) stationname,envehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201602 where enstation in
+ (0220,3020,2020,0320,1920,1620,2520) and entruckflag<>0 and yearflag=0 and realmoney>0  and entime<"2016-2-7 00:00:00" or entime>="2016-2-14 00:00:00" group by 1,2,3,4
+union all
+
+select enstation,stationname_get(enstation) stationname,envehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201603 where enstation in 
+(0220,3020,2020,0320,1920,1620,2520) and entruckflag<>0 and yearflag=0 and realmoney>0   group by 1,2,3,4
+union all
+
+select enstation,stationname_get(enstation) stationname,envehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201604 where enstation in
+ (0220,3020,2020,0320,1920,1620,2520) and entruckflag<>0 and yearflag=0 and realmoney>0  and entime<"2016-4-4 00:00:00" or entime>="2016-4-7 00:00:00" group by 1,2,3,4
+union all
+
+select enstation,stationname_get(enstation) stationname,envehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201605 where enstation in
+ (0220,3020,2020,0320,1920,1620,2520) and entruckflag<>0 and yearflag=0 and realmoney>0  and entime>="2016-5-4 00:00:00" group by 1,2,3,4
+union all
+
+select enstation,stationname_get(enstation) stationname,envehclass,paytype,sum(vehcount) vehcount,sum(realmoney) realmoney from listex201606 where enstation in
+ (0220,3020,2020,0320,1920,1620,2520) and entruckflag<>0 and yearflag=0 and realmoney>0   group by 1,2,3,4
+
+)group by 1,2,3,4;
+
+--------------------------------------联网前----------------------------------
+--------------ETC入口----------------
+select enstation,stationname,cardvehclass,sum(vehcount) vehcount,sum(realmoney) realmoney from(
+
+select enstation,stationname_get(enstation) stationname,cardvehclass,count(*) vehcount,sum(realmoney) realmoney from etcsourcedata201501 where enstation in (0220,3020,2020,0320,1920,1620,2520) and truckflag<>0 and cardtype not in (8,9,10) and realmoney>0  group by 1,2,3
+union all 
+
+select enstation,stationname_get(enstation) stationname,cardvehclass,count(*) vehcount,sum(realmoney) realmoney from etcsourcedata201502 where enstation in (0220,3020,2020,0320,1920,1620,2520) and truckflag<>0 and cardtype not in (8,9,10) and realmoney>0  group by 1,2,3
+union all
+
+select enstation,stationname_get(enstation) stationname,cardvehclass,count(*) vehcount,sum(realmoney) realmoney from etcsourcedata201503 where enstation in (0220,3020,2020,0320,1920,1620,2520) and truckflag<>0 and cardtype not in (8,9,10) and realmoney>0  group by 1,2,3
+union all
+
+select enstation,stationname_get(enstation) stationname,cardvehclass,count(*) vehcount,sum(realmoney) realmoney from etcsourcedata201504 where enstation in (0220,3020,2020,0320,1920,1620,2520) and truckflag<>0 and cardtype not in (8,9,10) and realmoney>0 and extime<"2015-4-5 00:00:00" or extime>="2015-4-8 00:00:00" group by 1,2,3
+union all
+
+select enstation,stationname_get(enstation) stationname,cardvehclass,count(*) vehcount,sum(realmoney) realmoney from etcsourcedata201505 where enstation in (0220,3020,2020,0320,1920,1620,2520) and truckflag<>0 and cardtype not in (8,9,10) and realmoney>0 and extime>="2015-5-4 00:00:00" or extime<"2015-5-1 00:00:00" group by 1,2,3
+union all 
+
+select enstation,stationname_get(enstation) stationname,cardvehclass,count(*) vehcount,sum(realmoney) realmoney from etcsourcedata201506 where enstation in (0220,3020,2020,0320,1920,1620,2520) and truckflag<>0 and cardtype not in (8,9,10) and realmoney>0  group by 1,2,3
+union all
+
+select enstation,stationname_get(enstation) stationname,cardvehclass,count(*) vehcount,sum(realmoney) realmoney from etcsourcedata201507 where enstation in (0220,3020,2020,0320,1920,1620,2520) and truckflag<>0 and cardtype not in (8,9,10) and realmoney>0 and exshiftdate<datetime(2015-7-18) year to day group by 1,2,3
+
+)group by 1,2,3;  
+
+--------------ETC出口----------------
+select exstation,stationname,cardvehclass,sum(vehcount) vehcount,sum(realmoney) realmoney from(
+
+select exstation,stationname_get(exstation) stationname,cardvehclass,count(*) vehcount,sum(realmoney) realmoney from etcsourcedata201501 where exstation in (0220,3020,2020,0320,1920,1620,2520) and truckflag<>0 and cardtype not in (8,9,10) and realmoney>0  group by 1,2,3
+union all 
+
+select exstation,stationname_get(exstation) stationname,cardvehclass,count(*) vehcount,sum(realmoney) realmoney from etcsourcedata201502 where exstation in (0220,3020,2020,0320,1920,1620,2520) and truckflag<>0 and cardtype not in (8,9,10) and realmoney>0  group by 1,2,3
+union all
+
+select exstation,stationname_get(exstation) stationname,cardvehclass,count(*) vehcount,sum(realmoney) realmoney from etcsourcedata201503 where exstation in (0220,3020,2020,0320,1920,1620,2520) and truckflag<>0 and cardtype not in (8,9,10) and realmoney>0  group by 1,2,3
+union all
+
+select exstation,stationname_get(exstation) stationname,cardvehclass,count(*) vehcount,sum(realmoney) realmoney from etcsourcedata201504 where exstation in (0220,3020,2020,0320,1920,1620,2520) and truckflag<>0 and cardtype not in (8,9,10) and realmoney>0 and extime<"2015-4-5 00:00:00" or extime>="2015-4-8 00:00:00" group by 1,2,3
+union all
+
+select exstation,stationname_get(exstation) stationname,cardvehclass,count(*) vehcount,sum(realmoney) realmoney from etcsourcedata201505 where exstation in (0220,3020,2020,0320,1920,1620,2520) and truckflag<>0 and cardtype not in (8,9,10) and realmoney>0 and extime>="2015-5-4 00:00:00" or extime<"2015-5-1 00:00:00" group by 1,2,3
+union all 
+
+select exstation,stationname_get(exstation) stationname,cardvehclass,count(*) vehcount,sum(realmoney) realmoney from etcsourcedata201506 where exstation in (0220,3020,2020,0320,1920,1620,2520) and truckflag<>0 and cardtype not in (8,9,10) and realmoney>0  group by 1,2,3
+union all
+
+select exstation,stationname_get(exstation) stationname,cardvehclass,count(*) vehcount,sum(realmoney) realmoney from etcsourcedata201507 where exstation in (0220,3020,2020,0320,1920,1620,2520) and truckflag<>0 and cardtype not in (8,9,10) and realmoney>0 and exshiftdate<datetime(2015-7-18) year to day group by 1,2,3
+
+)group by 1,2,3;     
+
+--------------非ETC入口----------------
+select enstation,stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from(
+
+select enstation,stationname_get(enstation) stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from accountodflow201501 where enstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and cardtype not in (8,9,10) and cashmoney>0  group by 1,2,3
+union all 
+
+select enstation,stationname_get(enstation) stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from accountodflow201502 where enstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and cardtype not in (8,9,10) and cashmoney>0  group by 1,2,3
+union all
+
+select enstation,stationname_get(enstation) stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from accountodflow201503 where enstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and cardtype not in (8,9,10) and cashmoney>0  group by 1,2,3
+union all
+
+select enstation,stationname_get(enstation) stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from accountodflow201504 where enstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and cardtype not in (8,9,10) and cashmoney>0 and financedate<datetime(2015-4-5) year to day or financedate>=datetime(2015-4-8) year to day group by 1,2,3
+union all
+
+select enstation,stationname_get(enstation) stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from accountodflow201505 where enstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and cardtype not in (8,9,10) and cashmoney>0 and financedate>=datetime(2015-5-4) year to day or financedate<datetime(2015-5-1) year to day group by 1,2,3
+union all 
+
+select enstation,stationname_get(enstation) stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from accountodflow201506 where enstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and cardtype not in (8,9,10) and cashmoney>0  group by 1,2,3
+union all
+
+select enstation,stationname_get(enstation) stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from accountodflow201507 where enstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and cardtype not in (8,9,10) and cashmoney>0 and financedate<datetime(2015-7-18) year to day group by 1,2,3
+
+)group by 1,2,3;
+
+
+--------------非ETC出口----------------
+select exstation,stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from(
+
+select exstation,stationname_get(exstation) stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from accountodflow201501 where exstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and cardtype not in (8,9,10) and cashmoney>0  group by 1,2,3
+union all 
+
+select exstation,stationname_get(exstation) stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from accountodflow201502 where exstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and cardtype not in (8,9,10) and cashmoney>0  group by 1,2,3
+union all
+
+select exstation,stationname_get(exstation) stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from accountodflow201503 where exstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and cardtype not in (8,9,10) and cashmoney>0  group by 1,2,3
+union all
+
+select exstation,stationname_get(exstation) stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from accountodflow201504 where exstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and cardtype not in (8,9,10) and cashmoney>0 and financedate<datetime(2015-4-5) year to day or financedate>=datetime(2015-4-8) year to day group by 1,2,3
+union all
+
+select exstation,stationname_get(exstation) stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from accountodflow201505 where exstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and cardtype not in (8,9,10) and cashmoney>0 and financedate>datetime(2015-5-4) year to day or financedate<datetime(2015-5-1) year to day group by 1,2,3
+union all 
+
+select exstation,stationname_get(exstation) stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from accountodflow201506 where exstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and cardtype not in (8,9,10) and cashmoney>0  group by 1,2,3
+union all
+
+select exstation,stationname_get(exstation) stationname,exvehclass,sum(vehcount) vehcount,sum(cashmoney) cashmoney from accountodflow201507 where exstation in (0220,3020,2020,0320,1920,1620,2520) and extruckflag<>0 and cardtype not in (8,9,10) and cashmoney>0 and financedate<datetime(2015-7-18) year to day group by 1,2,3
+
+)group by 1,2,3;
